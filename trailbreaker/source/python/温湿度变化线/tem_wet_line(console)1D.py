@@ -2,19 +2,10 @@ import pyb
 from pyb import UART
 from pyb import Pin
 import time
-import lcd_show
-import font
-from lcd_show import *
-from font import *
 import utime
 from random import randint
 import framebuf
-usrspi = USR_SPI(scl=Pin('X6',Pin.OUT_PP), sda=Pin('X7', Pin.OUT),dc=Pin('X8', Pin.OUT))
-disp = DISPLAY(usrspi,cs=Pin('X5', Pin.OUT),res=Pin('X4', Pin.OUT),led_en=Pin('X3', Pin.OUT))
-x1=40
-y=0
-x2=80
-disp.clr(disp.WHITE)#清屏（白色）
+
 class DHT11:#定义DHT11类
     def __init__(self,pin_):#初始化
         #self.data=[]
@@ -78,14 +69,10 @@ class DHT11:#定义DHT11类
         tmp=humidity+humidity_point+temperature+temperature_point
         if check==tmp:#检验正确，输出结果
             print('temperature is',temperature,'wet is',humidity,'%')
-            global x1,y,x2
-            disp.putpixel(x1+(temperature-25)*3,y,disp.RED)#红色表示温度
-            disp.putpixel(x2+(humidity-15)*3,y,disp.BLUE)#蓝色表示湿度
-            y+=1
         else:#检验错误，输出数据结果
             print('SHUJUCUOWU',humidity,humidity_point,temperature,temperature_point,check)
         return str(temperature)+','+str(humidity)
 while 1:
-    S=DHT11('Y4')#将Y4引脚传入DHT11类循环测量温湿度数值
+    S=DHT11('X12')#将Y4引脚传入DHT11类循环测量温湿度数值
     A=S.read_temps()
     pyb.delay(100)
